@@ -4,7 +4,7 @@ import Icon from "./Components/Icon";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Card, CardBody, Container, Button, Col, Row } from "reactstrap";
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/css/bootstrap.css";
 import "./App.css";
 
 const iconsArray = new Array(9).fill("empty");
@@ -16,23 +16,28 @@ function App() {
   const reloadGame = () => {
     setIsCross(true);
     setWinMessage("");
-    iconsArray.fill("empty", 0,9)
+    iconsArray.fill("empty", 0, 9);
   };
 
   const checkWinner = () => {
-    //
+    if (iconsArray[0] !== "empty" && (iconsArray[0] === iconsArray[1] && iconsArray[0] === iconsArray[2])) {
+      setWinMessage(`${iconsArray[0]} won`);
+    }
   };
 
   const changeIcons = (iconNumber) => {
-    if(winMessage){
-      // return something
+
+    checkWinner();
+
+    if (winMessage) {
+      return toast(winMessage, { type: "success" });
     }
 
-    if(iconsArray[iconNumber] === "empty"){
+    if (iconsArray[iconNumber] === "empty") {
       iconsArray[iconNumber] = isCross ? "Cross" : "Circle";
-      setIsCross(!isCross)
-    }else{
-      return toast("Already Filled", {type: "error"})
+      setIsCross(!isCross);
+    } else {
+      return toast("Already Filled", { type: "error" });
     }
   };
 
@@ -57,15 +62,19 @@ function App() {
               </h1>
             )}
             <div className="grid">
-              {
-                iconsArray.map((icon,index) => (
-                  <Card key={index} color="warning" onClick={() => {changeIcons(index)}}>
-                    <CardBody className="box">
-                      <Icon theIcon={icon} />
-                    </CardBody>
-                  </Card>
-                ))
-              }
+              {iconsArray.map((icon, index) => (
+                <Card
+                  key={index}
+                  color="warning"
+                  onClick={() => {
+                    changeIcons(index);
+                  }}
+                >
+                  <CardBody className="box">
+                    <Icon theIcon={icon} />
+                  </CardBody>
+                </Card>
+              ))}
             </div>
           </Col>
         </Row>
